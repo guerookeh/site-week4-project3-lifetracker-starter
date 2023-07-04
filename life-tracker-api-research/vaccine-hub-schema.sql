@@ -1,0 +1,8 @@
+CREATE TABLE Person (
+    id SERIAL PRIMARY KEY,
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE CHECK (POSITION('@' IN email) > 1),
+    location VARCHAR(63) NOT NULL,
+    date TIMESTAMP NOT NULL DEFAULT NOW()
+);

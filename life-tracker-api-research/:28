@@ -1,0 +1,55 @@
+const dbClientInstance = require('../db.js');
+
+const { BadRequestError, UnauthorizedError } = require('../utils/errors.js');
+
+class User {
+
+	static async login(credentials) {
+		
+		throw new UnauthorizedError('Invalid email/password.');
+	}
+
+	static async register(credentials) {
+		// Verify whether all credentials in the parameter are non-empty
+		const isEmpty = Object.values(credentials).some(credential => !credential);
+		if (isEmpty) throw new BadRequestError('One or more credentials are empty.');
+
+		// Verify whether the email is valid or not by checking if @ exists after index 0 
+		if (credentials.email.indexOf('@') <= 0) throw new BadRequestError('Invalid email.');
+
+		let query = `SELECT * FROM Person WHERE email=$1`;
+		let result = await dbClientInstance.query(query, [credentials.email.toLowerCase()]);
+
+		// Verify whether this email has already been used		
+		if (result.rows.length !== 0) throw new BadRequestError('Email is already in use.');
+
+		// Insert the credentials of said user into the Person database
+		const { first_name, last_name, email, location } = credentials; // be careful here, location is a keyword?
+		query = `INSERT INTO Person (first_name, last_name, email, location) VALUES ($1, $2, $3, $4)`;
+		result = await dbClientInstance.query(query, [first_name, last_name, email, location]);
+	
+		// If insert query was not successful, @rows property will be empty	
+		if (result.rows.length === 0) throw new Error('Server error inserting data.'); // or maybe next(new Error())? need to signal it's a server error, maybe throw into utils/error.js
+
+		// Return the corresponding user back
+		return result.rows[0];
+	}
+
+	static async fetchUserByEmail(email) {
+		// If the email field is empty, throw a bad request error
+		if (!email) throw new BadRequestError('Empty email parameter.');
+
+		const query = `SELECT * FROM "Person" WHERE email = $1`;
+		const result = await dbClientInstance.query(query, [email.toLowerCase()]);
+		
+		// If select query was not successful, @rows property will be empty
+		if (result.rows.length === 0) throw new NotFoundError('User not found.');
+
+		// Return the corresponding user back
+		const user = result.rows[0];
+		return user;
+	}
+
+}
+
+module.exports = User;
