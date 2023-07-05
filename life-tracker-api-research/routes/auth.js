@@ -1,20 +1,21 @@
 const express = require('express');
+
 const router = express.Router();
 
 const UserClass = require('../models/user.js');
 const { requireAuthenticatedUser, extractUserFromJwt } = require('../middleware/security.js');
 
 router.get('/selectUserJWT', requireAuthenticatedUser, extractUserFromJwt, async (req, res, next) => {
-	// Include `requireAuthenticatedUser` (params autopassed) so as to pass request through middleware before route handler
-	try {
-		// Attempt to extract `email` property, this check is done in `requireAuthenticatedUser`
-		const { email } = res.locals.user;
-		// Fetch `user` object using `email` param through static method `fetchUserByEmail` and return it
-		const user = await UserClass.fetchUserByEmail(email);
-		res.status(200).send(user);
-	} catch (err) {
-		next(err);
-	}	
+  // Include `requireAuthenticatedUser` (params autopassed) so as to pass request through middleware before route handler
+  try {
+    // Attempt to extract `email` property, this check is done in `requireAuthenticatedUser`
+    const { email } = res.locals.user;
+    // Fetch `user` object using `email` param through static method `fetchUserByEmail` and return it
+    const user = await UserClass.fetchUserByEmail(email);
+    res.status(200).send(user);
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.post('/login', async (req, res, next) => {
@@ -28,10 +29,10 @@ router.post('/login', async (req, res, next) => {
     // Set a cookie named 'jwt' in the response with the JWT obtained from the user object
     // The cookie is configured as 'httpOnly' to prevent client-side access
     res.cookie('jwt', user.jwt, { httpOnly: true });
-    
+
     // Remove the 'jwt' attribute from the user object
     delete user.jwt;
-    
+
     // Send a response with a status of '201 Created' and the user object as the response body
     res.status(201).send(user);
   } catch (err) {

@@ -23,7 +23,7 @@ app.use(cors());
 // ------main handler/endpoints---------
 
 app.get('/', (req, res) => {
-	res.send({ ping: 'pong'});
+  res.send({ ping: 'pong' });
 });
 
 // ------security middleware------------
@@ -33,25 +33,23 @@ app.use('/auth', authRouter);
 
 // -----post-processing middleware------
 
-app.use((req, res, next) => {
-	return next(new NotFoundError());
-});
+app.use((req, res, next) => next(new NotFoundError()));
 
 app.use((err, req, res, next) => {
-	const status = err.status || 500;
-	const message = err.message;
+  const status = err.status || 500;
+  const { message } = err;
 
-	return res.status(status).json({
-		error: { message, status },
-	});
+  return res.status(status).json({
+    error: { message, status },
+  });
 });
 
 // --------server/port----------
 
-const {PORT} = require('./config.js');
+const { PORT } = require('./config.js');
 
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
 
-console.log(`Server running...`);
+console.log('Server running...');
