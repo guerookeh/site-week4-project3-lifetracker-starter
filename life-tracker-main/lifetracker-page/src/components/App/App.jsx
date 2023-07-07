@@ -3,20 +3,23 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Home from "../Home/Home.jsx";
 import Nav from "../Nav/Nav.jsx";
+import Registration from "../Registration/Registration.jsx";
+import Login from "../Login/Login.jsx";
 
 
 function App() {
   
-  const [user, setUser] = useState(null);
-  
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authenticatedUser, setAuthenticatedUser] = useState(null);
+
   return (
     <>
       <Router>
         <Nav />
         <Routes>
           <Route path ="/" element={<Home />} />
-          <Route path="/register" element={<h3>register</h3>} />
-          <Route path="/login" element={<h3>login</h3>} />
+          <Route path="/register" element={<Registration />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </Router>
     </>
