@@ -1,27 +1,27 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import LandingPage from "./components/LandingPage";
-import RegistrationPage from "./components/RegistrationPage";
-import LoginPage from "./components/LoginPage";
-import DetailedActivityPage from "./components/DetailedActivityPage";
-import NavBar from "./components/NavBar";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-export default function App() {
+import Home from "../Home/Home.jsx";
+import Nav from "../Nav/Nav.jsx";
+
+
+function App() {
   
   const [user, setUser] = useState(null);
-
-  /*
-  useEffect(() => {
-
-  }. []);
-  */
   
   return (
-    <Router>
-      <NavBar />
-      <Switch>
-        <Route path="/" exact component={LandingPage} />
-      </Switch>
-    </Router>   
+    <>
+      <Router>
+        <Nav />
+        <Routes>
+          <Route path ="/" element={<Home />} />
+          <Route path="/register" element={<h3>register</h3>} />
+          <Route path="/login" element={<h3>login</h3>} />
+        </Routes>
+      </Router>
+    </>
   );
+
 }
+
+export default App;
