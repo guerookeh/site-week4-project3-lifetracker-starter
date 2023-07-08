@@ -7,9 +7,11 @@ const { requireAuthenticatedUser, extractUserFromJwt } = require('../middleware/
 
 router.post('/login', async (req, res, next) => {
   try {
-    const { email } = res.locals.user;
-    const user = await User.fetchUserByEmail(email);
-    res.status(200).send(user);
+    const userCredentials = req.body.credentials;
+    const user = await User.login(userCredentials);
+    res.cookie('jwt', user.jwt, { httpOnly: true });
+    delete user.jwt;
+    res.status(201).send(user);
   } catch (err) {
     next(err);
   }

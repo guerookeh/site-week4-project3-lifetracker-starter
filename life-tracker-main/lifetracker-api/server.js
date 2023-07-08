@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 
 const authRouter = require('./routes/auth.js');
+const { BadRequestError, NotFoundError } = require('./utils/errors.js');
 
 const app = express();
 
