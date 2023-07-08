@@ -10,6 +10,7 @@
 
 echo "Starting Express.JS server..."
 npm run dev
+echo "Express.JS booted." 
 
 # ---PostgreSQL---
 
@@ -17,7 +18,7 @@ npm run dev
 source .env
 
 # Start the PostgreSQL server (suppose it exists, check installation path)
-pg_ctl -D /usr/local/var/postgres start
+pg_ctl -D /usr/local/var/postgresql@14 start
 
 # Check if the database already exists
 if psql -h "$DATABASE_HOST" -p "$DATABASE_PORT" -U "$DATABASE_USER" -lqt | cut -d \| -f 1 | grep -qw "$DATABASE_NAME"; then
@@ -35,4 +36,7 @@ else
 fi
 
 # Run the SQL script to create tables
+echo "Running SQL script to create tables on database..."
 psql -h "$DATABASE_HOST" -p "$DATABASE_PORT" -U "$DATABASE_USER" -W "$DATABASE_PASSWORD" -d "$DATABASE_NAME" -f database/user-schema-setup.sql
+echo "PostgreSQL booted."
+

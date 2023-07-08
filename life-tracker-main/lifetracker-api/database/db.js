@@ -1,5 +1,5 @@
 const { Client } = require('pg');
-const { getDatabaseURI } = require('./config.js');
+const { getDatabaseURI } = require('../config.js');
 
 const databaseURI = getDatabaseURI();
 const client = new Client({ connectionString: databaseURI });

@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 
-const dbClientInstance = require('../db.js');
+const dbClientInstance = require('../database/db.js');
 const { BadRequestError, UnauthorizedError, NotFoundError } = require('../utils/errors.js');
 const { generateToken, createUserJwt } = require('../utils/tokens.js');
 
@@ -57,21 +57,21 @@ class User {
     }
   }
 
-  static doesUserExist(userEmail) {
+  static async doesUserExist(userEmail) {
     const result = await this.fetchUserByEmail(userEmail);
     if (result.rows.length === 0) {
       throw new NotFoundError('User with this email was not found.');
     }
   }
 
-  static doesEmailExist(userEmail) {
+  static async doesEmailExist(userEmail) {
     const result = await this.fetchUserByEmail(userEmail);
     if (result.rows.length !== 0) {
       throw new BadRequestError('Email is already in use.');
     }
   }
 
-  async static verifyPassword(loginPassword, hashedPassword) {
+  static async verifyPassword(loginPassword, hashedPassword) {
     const isValidPassword = await bcrypt.compare(loginPassword, hashedPassword);
     if (!isValidPassword) {
       throw new UnauthorizedError('Incorrect password.');
@@ -80,20 +80,20 @@ class User {
 
   // --Database Queries--
 
-  async static fetchUserByEmail(userEmail) {
+  static async fetchUserByEmail(userEmail) {
     const query = 'SELECT id, email FROM User WHERE LOWER(emai) = LOWER($1)';
     const result = await dbClientInstance.query(query, [userEmail]);
     return result.rows[0];
   }
 
-  async static retrieveUserObj(userEmail) {
+  static async retrieveUserObj(userEmail) {
     const lowerCaseUserEmail = userEmail.toLowerCase();
     const query = 'SELECT id, first_name, last_name, email, date FROM User WHERE LOWER(email) = LOWER($1)';
     const result = await dbClientInstance.query(query, [userEmail]);
     return result.rows[0];
   }
 
-  async static insertUserIntoDatabase(userObj) {
+  static async insertUserIntoDatabase(userObj) {
     const { first_name, last_name, email, hashed_password } = userObj;
     const query = 'INSERT INTO User (first_name, last_name, email, hashed_password) VALUES ($1, $2, LOWER($3), $4)';
     const result = await dbClientInstance.query(query, [first_name, last_name, email, hashed_password]);
@@ -101,7 +101,7 @@ class User {
 
   // --Data Processing--
 
-  async static hashPassword(userPassword) {
+  static async hashPassword(userPassword) {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(userPassword, salt);
     return hashedPassword;

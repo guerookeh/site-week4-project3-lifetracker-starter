@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const User = require('../models/user.js');
-const { requireAuthenticatedUser, extractUserFromJwt } = require('../middleware/security.js');
+// const { requireAuthenticatedUser, extractUserFromJwt } = require('../middleware/security.js');
 
 router.post('/login', async (req, res, next) => {
   try {
@@ -29,3 +29,4 @@ router.post('/register', async (req, res, next) => {
   }
 });
 
+module.exports = router;
