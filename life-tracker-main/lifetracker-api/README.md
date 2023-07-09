@@ -40,12 +40,20 @@ These should be updated with values needed for your PostgreSQL connection string
 In the `bootup` files there are two shell scripts to start Express and PostgreSQL.
 
 For both of these files, you will have to grant executable permissions.
-```bash chmod +x boot-express.sh```
-```bash chmod +x boot-postgres.sh```
+```bash 
+chmod +x boot-express.sh
+```
+```bash 
+chmod +x boot-postgres.sh
+```
 
 Proceed to run both of them afterwards.
-```bash ./boot-express.sh```
-```bash ./boot-postgres.sh```
+```bash 
+./boot-express.sh
+```
+```bash 
+./boot-postgres.sh
+```
 
 # NOTE: Certain module and application installations are required before utilizing these commands.
 Take note of any `node_module` dependencies in the `package.json`.
