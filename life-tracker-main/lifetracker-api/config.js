@@ -16,4 +16,3 @@ module.exports = {
   SECRET_KEY,
   getDatabaseURI,
 };
-

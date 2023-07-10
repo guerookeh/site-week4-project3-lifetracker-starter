@@ -5,7 +5,6 @@ const morgan = require('morgan');
 const cors = require('cors');
 
 const authRouter = require('./routes/auth.js');
-const { BadRequestError, NotFoundError } = require('./utils/errors.js');
 
 const app = express();
 
@@ -35,7 +34,7 @@ app.use((err, req, res, next) => {
   const status = err.status || 500;
   const { message } = err;
   return res.status(status).json({
-    error: { message, status },
+    error: { message, status }
   });
 });
 
@@ -48,3 +47,4 @@ app.listen(PORT, () => {
 });
 
 console.log('Server running...');
+

@@ -24,7 +24,7 @@ router.post('/register', async (req, res, next) => {
     res.cookie('jwt', user.jwt, { httpOnly: true });
     delete user.jwt;
     res.status(201).send(user);
-  } catch(err) {
+  } catch (err) {
     next(err);
   }
 });

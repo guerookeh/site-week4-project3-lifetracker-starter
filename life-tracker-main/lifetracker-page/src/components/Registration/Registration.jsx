@@ -1,8 +1,7 @@
-import React from "react";
-import "./Registration.css";
+import React from 'react';
+import './Registration.css';
 
 function Registration() {
-
   function handleSubmit(event) {
     event.preventDefault();
     const formData = new FormData(event.target);

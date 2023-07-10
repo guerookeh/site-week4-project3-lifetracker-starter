@@ -2,7 +2,6 @@ import React from 'react';
 import './Login.css';
 
 function Login() {
-
   function handleSubmit() {
     // Handle form submission logic
   }
