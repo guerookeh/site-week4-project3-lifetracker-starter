@@ -1,9 +1,53 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import './Login.css';
 
+import { AuthenticatedUserContext } from '../App/App.jsx';
+
+import LifeTrackerAPIClient from '../../api/apiclient.js';
+
 function Login() {
-  function handleSubmit() {
-    // Handle form submission logic
+
+  const { authenticatedUserState, setAuthenticatedUserState } = useContext(AuthenticatedUserContext);
+
+  const [loginStatus, setLoginStatus] = useState(null);
+
+  function processFormData(formData) {
+    const formValues = Object.fromEntries(formData.entries());
+    const wrappedFormValues = { credentials: formValues };
+    return wrappedFormValues;
+  }
+
+  async function postLogin(wrappedFormValues) {
+    const apiClient = new LifeTrackerAPIClient();
+    const apiRoute = '/auth/login'; 
+    const response = await apiClient.post(apiRoute, wrappedFormValues, {});
+    handleLoginStatus(response);
+    handleAuthenticatedState(response);
+  }
+
+  function handleLoginStatus(response) {
+    if (response.ok) {
+      const successString = JSON.stringify(response.body.message);
+      setLoginStatus(successString);
+    }
+    else {
+      const errorString = JSON.stringify(response.body.error.message);
+      setLoginStatus(errorString);
+    }
+  }
+
+  function handleAuthenticatedState(response) {
+    if (response.ok) {
+      const userEmail = response.body.user.email;
+      setAuthenticatedUserState(userEmail);
+    }
+  }
+
+  async function handleSubmit() {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const wrappedFormObj = processFormData(formData);
+    await postLogin(wrappedFormObj);
   }
 
   return (
@@ -18,6 +62,7 @@ function Login() {
         </div>
         <button type="submit">Log in</button>
       </form>
+      { (loginStatus) ? <h3>{loginStatus}</h3> : <></> }
     </div>
   );
 }
