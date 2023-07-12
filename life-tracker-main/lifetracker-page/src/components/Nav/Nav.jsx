@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import './Nav.css';
+
+import { AuthenticatedUserContext } from '../App/App.jsx';
 
 function Nav() {
   // we need a conditional for both types of navbars
   // if authenticated, the navbar will change
+
+  const { authenticatedUserState, setAuthenticatedUserState } = useContext(AuthenticatedUserContext);
+
+  function handleLogout() {
+    setAuthenticatedState(null);
+  }
 
   function GuestNav() {
     return (
@@ -26,7 +34,7 @@ function Nav() {
   function UserNav() {
     return (
       <li className="navbar-item">
-        <Link to="/" className="nav-link">
+        <Link to="/" className="nav-link" onClick={handleLogout}>
           Logout
         </Link>
       </li>
@@ -41,7 +49,7 @@ function Nav() {
             Home
           </Link>
         </li>
-        { false ? <UserNav /> : <GuestNav /> }
+        { (authenticatedUserState) ? <UserNav /> : <GuestNav /> }
       </ul>
     </div>
   );

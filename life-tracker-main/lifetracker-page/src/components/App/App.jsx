@@ -18,8 +18,8 @@ function App() {
 
   return (
     <Router>
-      <Nav />
       <AuthenticatedUserContext.Provider value={{ authenticatedUserState, setAuthenticatedUserState }}>
+        <Nav />
         <Routes>
           <Route path='/' element={<Home />} /> 
           {
