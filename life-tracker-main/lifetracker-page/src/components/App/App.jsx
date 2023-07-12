@@ -7,6 +7,8 @@ import Registration from '../Registration/Registration.jsx';
 import Login from '../Login/Login.jsx';
 import Nutrition from '../Nutrition/Nutrition.jsx';
 
+import LifeTrackerAPIClient from '../../api/apiclient.js';
+
 export const AuthenticatedUserContext = createContext(null);
 
 function App() {
@@ -14,7 +16,16 @@ function App() {
   const [authenticatedUserState, setAuthenticatedUserState] = useState(null);
 
   useEffect(() => {
-    
+    async function cookieLogin() {
+      const apiClient = new LifeTrackerAPIClient();
+      const apiRoute = '/auth/cookieLogin';
+      const response = await apiClient.post(apiRoute);
+      if (response.ok) {
+        const userObj = response.body.userObj;
+        setAuthenticatedUserState(userObj);
+      }
+    }
+    cookieLogin();
   }, []);
 
   return (

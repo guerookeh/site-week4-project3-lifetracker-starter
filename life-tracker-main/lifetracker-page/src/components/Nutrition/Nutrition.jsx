@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './Nutrition.css';
 
 import { AuthenticatedUserContext } from '../App/App.jsx';
@@ -16,23 +16,24 @@ function Nutrition() {
 
   // useEffect to populate nutrition grid
 
-  useEffect(() => populateNutritionGrid(), []);
+  useEffect(() => { 
+    async function callPopulate() {
+      populateNutritionGrid();
+    }
+    callPopulate();
+  }, []);
 
   // GET request
 
   async function getNutrition() {
     const apiRoute = '/nutrition/fetchAllItems';
-    const response = await apiClient.get(apiRoute, wrappedFormValues, {});
+    const response = await apiClient.get(apiRoute, {}, {});
     return response;
-  }
-
-  function processItemsResponse(response) {
-     
   }
 
   async function populateNutritionGrid() {
     const allItemsResponse = getNutrition();
-    const allItemsObject = processItemsResponse(allItemsResponse);
+    const allItemsObject = allItemsResponse.itemsObject;
     setNutritionList(allItemsObject); 
   }
 
@@ -72,21 +73,26 @@ function Nutrition() {
   return (
     <div className="nutrition">
         <form className="nutrition__form" onSubmit={handleSubmit}>
-            <input type="text" name="name" placeholder="Name" value={nutritionInput.name} onChange={handleChange} />
-            <input type="text" name="category" placeholder="Category" value={nutritionInput.category} onChange={handleChange} />
-            <input type="number" name="calories" placeholder="Calories" value={nutritionInput.calories} onChange={handleChange} />
+            <input type="text" name="name" placeholder="Name"/>
+            <input type="text" name="category" placeholder="Category" />
+            <input type="number" name="calories" placeholder="Calories" />
             <button type="submit">Add Item</button>
         </form>
         { (nutritionStatus) ? <h3>{nutritionStatus}</h3> : <></> }
         <div className="nutrition__grid">
-            {nutritionList.map((item) => (
-                <div key={item.id} className="nutrition__item">
-                    <h3>{item.name}</h3>
-                    <p>Category: {item.category}</p>
-                    <p>Calories: {item.calories}</p>
-                    <p>Date: {item.date}</p>
-                </div>
-            ))}
+            { (nutritionList) ?
+                ( nutritionList.map((item) => (
+                  <div key={item.id} className="nutrition__item">
+                      <h3>{item.name}</h3>
+                      <p>Category: {item.category}</p>
+                      <p>Calories: {item.calories}</p>
+                      <p>Date: {item.created_at}</p>
+                  </div>
+                  ))
+                ) : (
+                  <h3>Loading...</h3>
+                )
+            }
         </div>
     </div>
   );

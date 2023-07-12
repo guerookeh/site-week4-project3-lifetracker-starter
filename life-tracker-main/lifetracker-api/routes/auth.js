@@ -4,7 +4,7 @@ const router = express.Router();
 
 const { BACKEND_URL } = require('../config.js');
 const User = require('../models/user.js');
-const { requireAuthenticatedUser, extractUserFromJwt } = require('../middleware/security.js');
+const { requireAuthenticatedUser, extractUserFromJwtPayload } = require('../middleware/security.js');
 
 router.post('/login', async (req, res, next) => {
   try {
@@ -37,6 +37,24 @@ router.post('/register', async (req, res, next) => {
     delete user.jwt;
     const message = 'User successfully registered.';
     res.status(201).json({ message, user });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post('/cookieLogin', requireAuthenticatedUser, extractUserFromJwtPayload, async (req, res, next) => {
+  try {
+    const userEmail = res.locals.user.email;
+    const userObj = await User.retrieveUserObj(userEmail);
+    const cookieOptions = {
+      expires: new Date(Date.now() + 36000000),
+      httpOnly: true,
+      sameSite: 'lax',
+    };
+    const userJwt = User.buildJwt(userObj);
+    res.cookie('jwt', userJwt, cookieOptions);
+    const message = 'User successfuly logged through cookies!';
+    res.status(201).json({ message, userObj });
   } catch (err) {
     next(err);
   }

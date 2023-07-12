@@ -1,5 +1,4 @@
 const dbClientInstance = require('../database/db.js');
-const { BadRequestError } = require('../utils/errors.js');
 
 class Nutrition {
   // -----Model Methods----- 

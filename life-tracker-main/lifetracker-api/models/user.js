@@ -13,8 +13,7 @@ class User {
     const passObj = await this.fetchUserHashedPassword(credentials.email);
     await this.verifyPassword(credentials.password, passObj.hashed_password);
     const userObj = await this.retrieveUserObj(credentials.email);
-    const jwtPayload = { id: userObj.id, email: userObj.email };
-    const userJwt = createUserJwt(jwtPayload);
+    const userJwt = this.buildJwt(userObj);
     return { ...userObj, jwt: userJwt };
   }
 
@@ -25,12 +24,18 @@ class User {
     const hashedPassword = await this.hashPassword(credentials.password);
     await this.insertUserIntoDatabase({ ...credentials, hashed_password: hashedPassword });
     const userObj = await this.retrieveUserObj(credentials.email);
-    const jwtPayload = { id: userObj.id, email: userObj.email };
-    const userJwt = createUserJwt(jwtPayload);
+    const userJwt = this.buildJwt(userObj)
     return { ...userObj, jwt: userJwt };
   }
 
   // -----Helper Functions / Utility-----
+
+  // --JWT Builder--
+  static buildJwt(userObj) {
+    const jwtPayload = { id: userObj.id, email: userObj.email };
+    const userJwt = createUserJwt(jwtPayload);
+    return userJwt;
+  }
 
   // --Input Checks--
 
