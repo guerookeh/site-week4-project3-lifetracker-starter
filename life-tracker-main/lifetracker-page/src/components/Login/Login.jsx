@@ -23,8 +23,7 @@ function Login() {
     const apiClient = new LifeTrackerAPIClient();
     const apiRoute = '/auth/login'; 
     const response = await apiClient.post(apiRoute, wrappedFormValues, {});
-    handleLoginStatus(response);
-    handleAuthenticatedState(response);
+    return response
   }
 
   function handleLoginStatus(response) {
@@ -50,7 +49,9 @@ function Login() {
     event.preventDefault();
     const formData = new FormData(event.target);
     const wrappedFormObj = processFormData(formData);
-    await postLogin(wrappedFormObj);
+    const response = await postLogin(wrappedFormObj);
+    handleLoginStatus(response);
+    handleAuthenticatedState(response);
   }
 
   return (
