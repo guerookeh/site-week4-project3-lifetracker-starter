@@ -4,12 +4,17 @@ import './Nav.css';
 
 import { AuthenticatedUserContext } from '../App/App.jsx';
 
+import LifeTrackerAPIClient from '../../api/apiclient.js';
+
 function Nav() {
 
   const { authenticatedUserState, setAuthenticatedUserState } = useContext(AuthenticatedUserContext);
 
-  function handleLogout() {
-    setAuthenticatedState(null);
+  async function handleLogout() {
+    setAuthenticatedUserState(null);
+    const apiClient = new LifeTrackerAPIClient();
+    const apiRoute = '/auth/logout';
+    const response = await apiClient.get(apiRoute, {}, {});;
   }
 
   function GuestNav() {

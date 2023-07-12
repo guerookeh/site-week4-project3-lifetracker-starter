@@ -60,4 +60,14 @@ router.post('/cookieLogin', requireAuthenticatedUser, extractUserFromJwtPayload,
   }
 });
 
+router.get('/logout', async (req, res, next) => {
+  try {
+    res.cookie('jwt', '');
+    const message = 'User successfuly logged out and cookie replaced.'
+    res.status(201).json({ message });
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;
