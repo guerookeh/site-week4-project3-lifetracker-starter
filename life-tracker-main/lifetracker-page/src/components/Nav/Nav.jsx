@@ -31,11 +31,18 @@ function Nav() {
 
   function UserNav() {
     return (
-      <li className="navbar-item">
-        <Link to="/" className="nav-link" onClick={handleLogout}>
-          Logout
-        </Link>
-      </li>
+      <>
+        <li className="navbar-item">
+          <Link to="/" className="nav-link" onClick={handleLogout}>
+            Logout
+          </Link>
+        </li>
+        <li className="navbar-item">
+          <Link to="/nutrition" className="nav-link" onClick={handleLogout}>
+            Nutrition
+          </Link>
+        </li>
+      </>
     );
   }
 

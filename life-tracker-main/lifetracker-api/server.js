@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 
 const authRouter = require('./routes/auth.js');
+const nutritionRouter = require('./routes/nutrition.js');
 const { BadRequestError, NotFoundError } = require('./utils/errors.js');
 
 const app = express();
@@ -29,8 +30,9 @@ app.get('/', (req, res) => {
 
 // -----security middleware-----
 
-// -----auth route handler-----
+// -----route handlers-----
 
+app.use('/nutrition', nutritionRouter);
 app.use('/auth', authRouter);
 
 // -----error handlers/post-processing-----

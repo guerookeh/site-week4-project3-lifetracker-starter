@@ -27,11 +27,7 @@ function Login() {
   }
 
   function handleLoginStatus(response) {
-    if (response.ok) {
-      const successString = JSON.stringify(response.body.message);
-      setLoginStatus(successString);
-    }
-    else {
+    if (!response.ok) {
       const errorString = JSON.stringify(response.body.error.message);
       setLoginStatus(errorString);
     }

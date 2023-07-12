@@ -5,11 +5,12 @@ import Home from '../Home/Home.jsx';
 import Nav from '../Nav/Nav.jsx';
 import Registration from '../Registration/Registration.jsx';
 import Login from '../Login/Login.jsx';
-// import Nutrition from '../Nutrition/Nutrition.jsx';
+import Nutrition from '../Nutrition/Nutrition.jsx';
 
 export const AuthenticatedUserContext = createContext(null);
 
 function App() {
+
   const [authenticatedUserState, setAuthenticatedUserState] = useState(null);
 
   useEffect(() => {
@@ -25,7 +26,7 @@ function App() {
           {
             (authenticatedUserState) ? (
               <>
-                <Route path='/register' element={<Registration />} />
+                <Route path='/nutrition' element={<Nutrition />} />
               </>
             ) : (
               <>

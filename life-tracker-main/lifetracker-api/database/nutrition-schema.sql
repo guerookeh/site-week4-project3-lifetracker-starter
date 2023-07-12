@@ -1,0 +1,8 @@
+CREATE TABLE NutritionTable (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  category VARCHAR(255) NOT NULL,
+  calories INTEGER NOT NULL,
+  user_id INTEGER REFERENCES UserTable(id),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

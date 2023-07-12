@@ -8,7 +8,6 @@ const { requireAuthenticatedUser, extractUserFromJwt } = require('../middleware/
 
 router.post('/login', async (req, res, next) => {
   try {
-    console.log(req.cookies);
     const userCredentials = req.body.credentials;
     const user = await User.login(userCredentials);
     const cookieOptions = {
