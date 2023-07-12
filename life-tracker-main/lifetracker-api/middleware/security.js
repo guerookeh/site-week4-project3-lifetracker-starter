@@ -13,7 +13,7 @@ function jwtFrom({ headers }) {
 
   const cookieHeader = headers.cookie;
   if (cookieHeader && cookieHeader.startsWith('jwt=')) {
-    const token = cookie.split('=')[1];
+    const token = cookieHeader.split('=')[1];
     return token;
   }
 

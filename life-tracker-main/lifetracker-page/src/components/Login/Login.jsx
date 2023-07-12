@@ -23,7 +23,7 @@ function Login() {
     const apiClient = new LifeTrackerAPIClient();
     const apiRoute = '/auth/login'; 
     const response = await apiClient.post(apiRoute, wrappedFormValues, {});
-    return response
+    return response;
   }
 
   function handleLoginStatus(response) {
