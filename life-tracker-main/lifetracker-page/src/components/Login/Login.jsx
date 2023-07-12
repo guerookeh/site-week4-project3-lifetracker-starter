@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
 import { AuthenticatedUserContext } from '../App/App.jsx';
@@ -10,6 +11,7 @@ function Login() {
   const { authenticatedUserState, setAuthenticatedUserState } = useContext(AuthenticatedUserContext);
 
   const [loginStatus, setLoginStatus] = useState(null);
+  const navigate = useNavigate();
 
   function processFormData(formData) {
     const formValues = Object.fromEntries(formData.entries());
@@ -40,6 +42,7 @@ function Login() {
     if (response.ok) {
       const userEmail = response.body.user.email;
       setAuthenticatedUserState(userEmail);
+      navigate('/'); 
     }
   }
 
