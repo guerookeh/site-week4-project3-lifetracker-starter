@@ -19,7 +19,7 @@ function Home() {
   function UserHome() {
     return (
       <>
-        <h1 className="home__title">`Welcome back to LifeTracker, ${authenticatedUserState.first_name} !`</h1>
+        <h1 className="home__title">Welcome back to LifeTracker, {authenticatedUserState.first_name} !</h1>
       </>  
     );
   }
