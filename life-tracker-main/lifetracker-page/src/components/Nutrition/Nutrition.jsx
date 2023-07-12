@@ -25,15 +25,15 @@ function Nutrition() {
 
   // GET request
 
-  async function getNutrition() {
+  async function getNutritionList() {
     const apiRoute = '/nutrition/fetchAllItems';
     const response = await apiClient.get(apiRoute, {}, {});
     return response;
   }
 
   async function populateNutritionGrid() {
-    const allItemsResponse = getNutrition();
-    const allItemsObject = allItemsResponse.itemsObject;
+    const allItemsResponse = await getNutritionList();
+    const allItemsObject = allItemsResponse.body.itemsObject;
     setNutritionList(allItemsObject); 
   }
 
@@ -41,7 +41,8 @@ function Nutrition() {
   
   function processFormData(formData) {
     const formValues = Object.fromEntries(formData.entries());
-    const wrappedFormValues = { credentials: formValues };
+    const authenticatedUserId = authenticatedUserState.id;
+    const wrappedFormValues = { itemObj: { ...formValues, user_id: authenticatedUserId } };
     return wrappedFormValues;
   }
 
@@ -64,34 +65,41 @@ function Nutrition() {
  
   async function handleSubmit() {
     event.preventDefault();
-    const formData = new FormData(event.target);
-    const wrappedFormObj = processFormData(formData);
-    const response = await postNutrition(wrappedFormObj);
-    handleNutritionStatus(response);
+    try {
+      const formData = new FormData(event.target);
+      const wrappedFormObj = processFormData(formData);
+      const response = await postNutrition(wrappedFormObj);
+      handleNutritionStatus(response);
+      await populateNutritionGrid();
+    } catch (err) {
+      setNutritionStatus('Error has occured.');
+    }
   }
 
   return (
     <div className="nutrition">
+        <h3>Insert name, category, and the calories of your diet today !</h3>
         <form className="nutrition__form" onSubmit={handleSubmit}>
-            <input type="text" name="name" placeholder="Name"/>
-            <input type="text" name="category" placeholder="Category" />
-            <input type="number" name="calories" placeholder="Calories" />
+            <input type="text" name="name" placeholder="Name" required/>
+            <input type="text" name="category" placeholder="Category" required/>
+            <input type="number" name="calories" placeholder="Calories" required/>
             <button type="submit">Add Item</button>
         </form>
         { (nutritionStatus) ? <h3>{nutritionStatus}</h3> : <></> }
         <div className="nutrition__grid">
-            { (nutritionList) ?
-                ( nutritionList.map((item) => (
-                  <div key={item.id} className="nutrition__item">
-                      <h3>{item.name}</h3>
-                      <p>Category: {item.category}</p>
-                      <p>Calories: {item.calories}</p>
-                      <p>Date: {item.created_at}</p>
-                  </div>
-                  ))
-                ) : (
-                  <h3>Loading...</h3>
-                )
+            { 
+            (nutritionList) ?
+              ( nutritionList.map((item) => (
+                <div key={item.id} className="nutrition__item">
+                    <h3>{item.name}</h3>
+                    <p>Category: {item.category}</p>
+                    <p>Calories: {item.calories}</p>
+                    <p>Date: {item.created_at}</p>
+                </div>
+                ))
+              ) : (
+                <h3>Loading...</h3>
+              )
             }
         </div>
     </div>
