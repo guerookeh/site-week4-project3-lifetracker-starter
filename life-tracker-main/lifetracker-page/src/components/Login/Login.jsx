@@ -39,8 +39,8 @@ function Login() {
 
   function handleAuthenticatedState(response) {
     if (response.ok) {
-      const userEmail = response.body.user.email;
-      setAuthenticatedUserState(userEmail);
+      const userObj = response.body.user;
+      setAuthenticatedUserState(userObj);
       navigate('/'); 
     }
   }

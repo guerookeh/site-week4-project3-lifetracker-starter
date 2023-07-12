@@ -5,8 +5,6 @@ import './Nav.css';
 import { AuthenticatedUserContext } from '../App/App.jsx';
 
 function Nav() {
-  // we need a conditional for both types of navbars
-  // if authenticated, the navbar will change
 
   const { authenticatedUserState, setAuthenticatedUserState } = useContext(AuthenticatedUserContext);
 
