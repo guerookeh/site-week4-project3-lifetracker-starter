@@ -13,7 +13,13 @@ const app = express();
 
 app.use(express.json());
 app.use(morgan('tiny'));
-app.use(cors());
+
+const corsOptions = {
+  origin: 'http://localhost:5173',
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 // -----main handler/endpoints-----
 

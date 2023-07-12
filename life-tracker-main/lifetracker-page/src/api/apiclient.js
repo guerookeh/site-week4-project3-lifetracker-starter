@@ -22,13 +22,15 @@ class LifeTrackerAPIClient {
         ...headers,
       },
       body: body ? JSON.stringify(body) : null,
+      credentials: 'include',
+      withCredentials: true,
     });
     
     const data = await response.json();
     return {
       ok: response.ok,
       status: response.status,
-      body: response.status != 204 ? data : null,
+      body: (response.status != 204) ? data : null,
     };
   }
 

@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const { SECRET_KEY } = require('../config.js');
-const { UnauthorizedError } = require('../utils/erorrs.js');
+const { UnauthorizedError } = require('../utils/errors.js');
 
 function jwtFrom({ headers }) {
   const authorizationHeader = headers.authorization;
@@ -50,6 +50,6 @@ function extractUserFromJwtPayload(req, res, next) {
 
 module.exports = {
   jwtFrom,
-  extractUserFromJwt,
+  extractUserFromJwtPayload,
   requireAuthenticatedUser,
 };
