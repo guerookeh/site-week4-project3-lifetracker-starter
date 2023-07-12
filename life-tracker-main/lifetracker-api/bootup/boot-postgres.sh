@@ -38,8 +38,10 @@ echo "Database '$DATABASE_NAME' successfuly created with user '$DATABASE_USER' a
 
 # Run the SQL script to create tables
 echo "Running SQL script to create tables on '$DATABASE_NAME' database as '$DATABASE_USER'..."
-psql -h "$DATABASE_HOST" -p "$DATABASE_PORT" -d "$DATABASE_NAME" -U "$DATABASE_USER" -c '\i ../database/user-schema.sql'
+psql -h "$DATABASE_HOST" -p "$DATABASE_PORT" -d "$DATABASE_NAME" -U "$DATABASE_USER" -c '\i ../database/user-schema.sql;'
 echo "User table created."
+psql -h "$DATABASE_HOST" -p "$DATABASE_PORT" -d "$DATABASE_NAME" -U "$DATABASE_USER" -c '\i ../database/nutrition-schema.sql;'
+echo "Nutrition table created."
 
 echo "Press Ctrl+C to stop the script and shutdown the PostgreSQL server."
 
